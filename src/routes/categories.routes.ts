@@ -1,15 +1,11 @@
 import { Router } from 'express';
 
 import { CategoriesRepository } from '../repositories/CategoriesRepository';
+import { PostgresCategoriesRepository } from '../repositories/PostgresCategoriesRepository';
 import { CreateCategoryService } from '../services/CreateCategoryService';
 
 const categoriesRoutes = Router();
 const categoriesRepository = new CategoriesRepository();
-
-categoriesRoutes.get('/', (request, response) => {
-    const all = categoriesRepository.list();
-    return response.status(200).json({ all });
-});
 
 categoriesRoutes.post('/', (request, response) => {
     const { name, description } = request.body;
@@ -19,6 +15,11 @@ categoriesRoutes.post('/', (request, response) => {
     );
     createCategoryService.execute({ name, description });
     return response.status(201).send();
+});
+
+categoriesRoutes.get('/', (request, response) => {
+    const all = categoriesRepository.list();
+    return response.json(all);
 });
 
 export { categoriesRoutes };
